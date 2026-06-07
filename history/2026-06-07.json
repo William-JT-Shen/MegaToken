@@ -4,280 +4,280 @@
     {
       "vendor": "OpenAI",
       "model": "GPT-4o",
-      "input": 2.5167,
-      "output": 10.067,
+      "input": 2.5,
+      "output": 10.0,
       "context": "128K",
       "note": "多模态"
     },
     {
       "vendor": "OpenAI",
       "model": "GPT-4o mini",
-      "input": 0.1457,
-      "output": 0.5829,
+      "input": 0.15,
+      "output": 0.6,
       "context": "128K",
       "note": "多模态"
     },
     {
       "vendor": "OpenAI",
       "model": "GPT-4 Turbo",
-      "input": 10.3271,
-      "output": 30.9813,
+      "input": 10.0,
+      "output": 30.0,
       "context": "128K",
       "note": ""
     },
     {
       "vendor": "Anthropic",
       "model": "Claude 3.5 Sonnet",
-      "input": 3.1147,
-      "output": 15.5737,
+      "input": 3.0,
+      "output": 15.0,
       "context": "200K",
       "note": ""
     },
     {
       "vendor": "Anthropic",
       "model": "Claude 3 Opus",
-      "input": 15.7995,
-      "output": 78.9975,
+      "input": 15.0,
+      "output": 75.0,
       "context": "200K",
       "note": "旗舰模型"
     },
     {
       "vendor": "Anthropic",
       "model": "Claude 3 Haiku",
-      "input": 0.2474,
-      "output": 1.2372,
+      "input": 0.25,
+      "output": 1.25,
       "context": "200K",
       "note": "轻量级"
     },
     {
       "vendor": "Google",
       "model": "Gemini 1.5 Pro",
-      "input": 1.2251,
-      "output": 2.4502,
+      "input": 1.25,
+      "output": 2.5,
       "context": "1M",
       "note": "长上下文"
     },
     {
       "vendor": "Google",
       "model": "Gemini 1.5 Flash",
-      "input": 0.0737,
-      "output": 0.1475,
+      "input": 0.075,
+      "output": 0.15,
       "context": "1M",
       "note": "高效"
     },
     {
       "vendor": "Google",
       "model": "Gemini 1.0 Pro",
-      "input": 1.0426,
-      "output": 2.0851,
+      "input": 1.0,
+      "output": 2.0,
       "context": "32K",
       "note": ""
     },
     {
       "vendor": "Microsoft",
       "model": "GPT-4o (Azure)",
-      "input": 2.4522,
-      "output": 9.8086,
+      "input": 2.5,
+      "output": 10.0,
       "context": "128K",
       "note": "Azure OpenAI"
     },
     {
       "vendor": "Microsoft",
       "model": "GPT-4 Turbo (Azure)",
-      "input": 10.1349,
-      "output": 30.4048,
+      "input": 10.0,
+      "output": 30.0,
       "context": "128K",
       "note": "Azure OpenAI"
     },
     {
       "vendor": "AWS",
       "model": "Claude 3.5 Sonnet (Bedrock)",
-      "input": 3.0339,
-      "output": 15.1695,
+      "input": 3.0,
+      "output": 15.0,
       "context": "200K",
       "note": "Bedrock"
     },
     {
       "vendor": "AWS",
       "model": "Titan Text Express",
-      "input": 0.0514,
-      "output": 0.1543,
+      "input": 0.05,
+      "output": 0.15,
       "context": "8K",
       "note": "Amazon Titan"
     },
     {
       "vendor": "AWS",
       "model": "Titan Text Premier",
-      "input": 1.0007,
-      "output": 3.002,
+      "input": 1.0,
+      "output": 3.0,
       "context": "32K",
       "note": "Amazon Titan"
     },
     {
       "vendor": "DeepSeek",
       "model": "DeepSeek-R1",
-      "input": 0.5132,
-      "output": 1.5396,
+      "input": 0.5,
+      "output": 1.5,
       "context": "128K",
       "note": "开源"
     },
     {
       "vendor": "DeepSeek",
       "model": "DeepSeek-R1 Turbo",
-      "input": 0.2506,
-      "output": 0.7518,
+      "input": 0.25,
+      "output": 0.75,
       "context": "64K",
       "note": "开源"
     },
     {
       "vendor": "Meta",
       "model": "Llama 3.3 70B",
-      "input": 0.001,
-      "output": 0.001,
+      "input": 0.0,
+      "output": 0.0,
       "context": "128K",
       "note": "开源免费"
     },
     {
       "vendor": "Meta",
       "model": "Llama 3.3 8B",
-      "input": 0.001,
-      "output": 0.001,
+      "input": 0.0,
+      "output": 0.0,
       "context": "128K",
       "note": "开源免费"
     },
     {
       "vendor": "Cloudflare",
       "model": "Llama 3.1 8B",
-      "input": 0.1567,
-      "output": 0.1567,
+      "input": 0.15,
+      "output": 0.15,
       "context": "64K",
       "note": "Workers AI"
     },
     {
       "vendor": "Cloudflare",
       "model": "Mistral 7B",
-      "input": 0.1049,
-      "output": 0.1049,
+      "input": 0.1,
+      "output": 0.1,
       "context": "32K",
       "note": "Workers AI"
     },
     {
       "vendor": "NVIDIA",
       "model": "Nemotron-Mini-4B",
-      "input": 0.001,
-      "output": 0.001,
+      "input": 0.0,
+      "output": 0.0,
       "context": "8K",
       "note": "开源免费"
     },
     {
       "vendor": "Perplexity",
       "model": "pplx-7b-online",
-      "input": 0.206,
-      "output": 0.206,
+      "input": 0.2,
+      "output": 0.2,
       "context": "128K",
       "note": "联网搜索"
     },
     {
       "vendor": "Perplexity",
       "model": "pplx-70b-online",
-      "input": 0.9651,
-      "output": 0.9651,
+      "input": 1.0,
+      "output": 1.0,
       "context": "128K",
       "note": "联网搜索"
     },
     {
       "vendor": "Mistral",
       "model": "Mistral Large 2",
-      "input": 2.5439,
-      "output": 7.6318,
+      "input": 2.5,
+      "output": 7.5,
       "context": "128K",
       "note": ""
     },
     {
       "vendor": "Mistral",
       "model": "Mistral 8x7B",
-      "input": 0.1593,
-      "output": 0.1593,
+      "input": 0.16,
+      "output": 0.16,
       "context": "64K",
       "note": "开源"
     },
     {
       "vendor": "Cohere",
       "model": "Command R+",
-      "input": 0.8598,
-      "output": 2.5794,
+      "input": 1.0,
+      "output": 3.0,
       "context": "128K",
       "note": ""
     },
     {
       "vendor": "Cohere",
       "model": "Command R",
-      "input": 0.1492,
-      "output": 0.1492,
+      "input": 0.15,
+      "output": 0.15,
       "context": "128K",
       "note": ""
     },
     {
       "vendor": "Databricks",
       "model": "Dolly 2.0",
-      "input": 0.001,
-      "output": 0.001,
+      "input": 0.0,
+      "output": 0.0,
       "context": "8K",
       "note": "开源免费"
     },
     {
       "vendor": "Hugging Face",
       "model": "Zephyr 7B",
-      "input": 0.001,
-      "output": 0.001,
+      "input": 0.0,
+      "output": 0.0,
       "context": "8K",
       "note": "开源免费"
     },
     {
       "vendor": "ByteDance",
       "model": "Doubao 4.0",
-      "input": 0.8095,
-      "output": 2.4284,
+      "input": 0.8,
+      "output": 2.4,
       "context": "128K",
       "note": "中文优化"
     },
     {
       "vendor": "Baidu",
       "model": "ERNIE 4.0",
-      "input": 0.5029,
-      "output": 1.5088,
+      "input": 0.5,
+      "output": 1.5,
       "context": "128K",
       "note": "中文优化"
     },
     {
       "vendor": "Alibaba",
       "model": "Qwen 2.5 72B",
-      "input": 0.001,
-      "output": 0.001,
+      "input": 0.0,
+      "output": 0.0,
       "context": "128K",
       "note": "开源免费"
     },
     {
       "vendor": "Alibaba",
       "model": "Qwen 2.5 14B",
-      "input": 0.001,
-      "output": 0.001,
+      "input": 0.0,
+      "output": 0.0,
       "context": "128K",
       "note": "开源免费"
     },
     {
       "vendor": "Tencent",
       "model": "Hunyuan Large Model",
-      "input": 1.0094,
-      "output": 3.0283,
+      "input": 1.0,
+      "output": 3.0,
       "context": "128K",
       "note": "中文优化"
     },
     {
       "vendor": "JD",
       "model": "JD Chat",
-      "input": 0.5817,
-      "output": 1.7452,
+      "input": 0.6,
+      "output": 1.8,
       "context": "64K",
       "note": "电商场景"
     }
