@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 模型价格历史 · 看板</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; background: #f5f7fb; }
+    .container { max-width: 1300px; margin: 0 auto; }
+    h1 { text-align: center; color: #0f172a; }
+    .controls { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin: 1rem 0; }
+    select, button, input[type="checkbox"] { padding: 0.5rem; border-radius: 6px; border: 1px solid #cbd5e1; }
+    .view-toggle { margin-left: auto; display: flex; gap: 0.5rem; }
+    .btn { background: #fff; cursor: pointer; font-size: 0.9rem; }
+    .btn.active { background: #2563eb; color: white; border-color: #2563eb; }
+    .model-multi-select { max-width: 400px; width: 100%; }
+    #chart { width: 100%; height: 550px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-top: 1rem; }
+    .note { font-size: 0.85rem; color: #64748b; text-align: center; margin-top: 0.5rem; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>📈 AI 模型 Token 价格历史</h1>
+  <div class="controls">
+    <div class="view-toggle">
+      <button id="btnSingle" class="btn active">单模型 K线</button>
+      <button id="btnCompare" class="btn">多模型对比</button>
+    </div>
+  </div>
+
+  <!-- 单模型视图 -->
+  <div id="singleView">
+    <div class="controls">
+      <label>模型：</label>
+      <select id="modelSelect"></select>
+      <label>价格类型：</label>
+      <select id="priceType">
+        <option value="input">输入价格</option>
+        <option value="output">输出价格</option>
+      </select>
+      <span id="modelInfo" style="color:#475569;"></span>
+    </div>
+  </div>
+
+  <!-- 多模型对比视图 -->
+  <div id="compareView" style="display:none;">
+    <div class="controls">
+      <label>选择要对比的模型（可多选）：</label>
+      <select id="compareModelSelect" class="model-multi-select" multiple size="5">
+        <!-- 动态填充 -->
+      </select>
+      <button id="btnCompareGo" class="btn">生成对比图</button>
+      <span style="margin-left:1rem; color:#64748b;">提示：按住 Ctrl 多选，对比输入价格折线。</span>
+    </div>
+  </div>
+
+  <div id="chart"></div>
+  <p class="note"><a href="index.html">← 返回实时价格看板</a> | 数据来源：<span id="lastUpdated"></span></p>
+</div>
+
+<script>
+  (async function() {
+    const resp = await fetch('history.json');
+    const history = await resp.json();
+    const models = history.models;
+    const modelKeys = Object.keys(models).sort((a,b) =>
+      models[a].vendor.localeCompare(models[b].vendor) || models[a].model.localeCompare(models[b].model)
+    );
+
+    // 单模型选择器
+    const modelSelect = document.getElementById('modelSelect');
+    const priceType = document.getElementById('priceType');
+    const modelInfo = document.getElementById('modelInfo');
+    modelKeys.forEach(key => {
+      const m = models[key];
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = `${m.vendor} - ${m.model}`;
+      modelSelect.appendChild(opt);
+    });
+
+    // 多模型选择器
+    const compareSelect = document.getElementById('compareModelSelect');
+    modelKeys.forEach(key => {
+      const m = models[key];
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = `${m.vendor} - ${m.model}`;
+      compareSelect.appendChild(opt);
+    });
+
+    // 视图切换
+    const btnSingle = document.getElementById('btnSingle');
+    const btnCompare = document.getElementById('btnCompare');
+    const singleView = document.getElementById('singleView');
+    const compareView = document.getElementById('compareView');
+    const chartDom = document.getElementById('chart');
+    const myChart = echarts.init(chartDom);
+
+    let currentView = 'single'; // 'single' or 'compare'
+
+    btnSingle.addEventListener('click', () => {
+      if (currentView === 'single') return;
+      btnSingle.classList.add('active');
+      btnCompare.classList.remove('active');
+      singleView.style.display = 'block';
+      compareView.style.display = 'none';
+      currentView = 'single';
+      renderSingleChart();
+    });
+
+    btnCompare.addEventListener('click', () => {
+      if (currentView === 'compare') return;
+      btnCompare.classList.add('active');
+      btnSingle.classList.remove('active');
+      singleView.style.display = 'none';
+      compareView.style.display = 'block';
+      currentView = 'compare';
+      // 清空或保留旧图，等待用户点击生成对比
+      myChart.clear();
+    });
+
+    // 单模型K线图渲染
+    function renderSingleChart() {
+      const key = modelSelect.value;
+      if (!key) return;
+      const m = models[key];
+      const type = priceType.value;
+      const ohlcData = type === 'input' ? m.input_ohlc : m.output_ohlc;
+      modelInfo.textContent = `上下文: ${m.context || '未知'} | 备注: ${m.note || '无'}`;
+
+      const categories = [];
+      const values = [];
+      ohlcData.forEach(item => {
+        categories.push(item[0]);
+        values.push([item[1], item[2], item[3], item[4]]);
+      });
+
+      const option = {
+        title: { text: `${m.vendor} ${m.model} - ${type === 'input' ? '输入' : '输出'}价格 K线`, left: 'center' },
+        tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+        xAxis: { type: 'category', data: categories, axisLabel: { rotate: 45 } },
+        yAxis: { type: 'value', scale: true, axisLabel: { formatter: '${value}' } },
+        series: [{
+          type: 'candlestick',
+          data: values,
+          itemStyle: { color: '#ef4444', color0: '#10b981', borderColor: '#ef4444', borderColor0: '#10b981' }
+        }],
+        dataZoom: [{ type: 'inside' }, { type: 'slider' }]
+      };
+      myChart.setOption(option, true);
+    }
+
+    modelSelect.addEventListener('change', renderSingleChart);
+    priceType.addEventListener('change', renderSingleChart);
+
+    // 多模型对比折线图
+    document.getElementById('btnCompareGo').addEventListener('click', () => {
+      const selectedOptions = Array.from(compareSelect.selectedOptions).map(opt => opt.value);
+      if (selectedOptions.length === 0) {
+        alert('请至少选择一个模型');
+        return;
+      }
+
+      // 构建所有日期的并集
+      const dateSet = new Set();
+      selectedOptions.forEach(key => {
+        const ohlc = models[key].input_ohlc;  // 对比输入价格
+        ohlc.forEach(d => dateSet.add(d[0]));
+      });
+      const allDates = Array.from(dateSet).sort();
+
+      const series = selectedOptions.map(key => {
+        const m = models[key];
+        const ohlc = m.input_ohlc;
+        // 转换为日期->价格映射（取收盘价）
+        const priceMap = {};
+        ohlc.forEach(d => priceMap[d[0]] = d[2]); // close
+        const data = allDates.map(date => priceMap[date] ?? null);
+        return {
+          name: `${m.vendor} ${m.model}`,
+          type: 'line',
+          data: data,
+          connectNulls: true,
+          smooth: true,
+          symbol: 'circle',
+          symbolSize: 4
+        };
+      });
+
+      const option = {
+        title: { text: '多模型输入价格对比（美元/百万token）', left: 'center' },
+        tooltip: { trigger: 'axis' },
+        legend: { type: 'scroll', bottom: 0, data: selectedOptions.map(k => `${models[k].vendor} ${models[k].model}`) },
+        xAxis: { type: 'category', data: allDates, axisLabel: { rotate: 45 } },
+        yAxis: { type: 'value', scale: true, axisLabel: { formatter: '${value}' } },
+        series: series,
+        dataZoom: [{ type: 'inside' }, { type: 'slider' }]
+      };
+      myChart.setOption(option, true);
+    });
+
+    // 加载上次更新时间
+    document.getElementById('lastUpdated').textContent = history.last_updated || '未知';
+
+    // 默认渲染第一个单模型K线
+    if (modelKeys.length > 0) {
+      modelSelect.value = modelKeys[0];
+      renderSingleChart();
+    }
+
+    window.addEventListener('resize', () => myChart.resize());
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+{
+  "last_updated": "2026-05-25",
+  "models": [
+    {
+      "vendor": "OpenAI",
+      "model": "GPT-4o",
+      "input": 3.1736,
+      "output": 12.6944,
+      "context": "128K",
+      "note": "多模态"
+    },
+    {
+      "vendor": "OpenAI",
+      "model": "GPT-4o mini",
+      "input": 0.1629,
+      "output": 0.6514,
+      "context": "128K",
+      "note": "多模态"
+    },
+    {
+      "vendor": "OpenAI",
+      "model": "GPT-4 Turbo",
+      "input": 9.6667,
+      "output": 29.0,
+      "context": "128K",
+      "note": ""
+    },
+    {
+      "vendor": "Anthropic",
+      "model": "Claude 3.5 Sonnet",
+      "input": 4.2016,
+      "output": 21.0082,
+      "context": "200K",
+      "note": ""
+    },
+    {
+      "vendor": "Anthropic",
+      "model": "Claude 3 Opus",
+      "input": 17.4864,
+      "output": 87.4318,
+      "context": "200K",
+      "note": "旗舰模型"
+    },
+    {
+      "vendor": "Anthropic",
+      "model": "Claude 3 Haiku",
+      "input": 0.2352,
+      "output": 1.1759,
+      "context": "200K",
+      "note": "轻量级"
+    },
+    {
+      "vendor": "Google",
+      "model": "Gemini 1.5 Pro",
+      "input": 1.1605,
+      "output": 2.321,
+      "context": "1M",
+      "note": "长上下文"
+    },
+    {
+      "vendor": "Google",
+      "model": "Gemini 1.5 Flash",
+      "input": 0.0741,
+      "output": 0.1483,
+      "context": "1M",
+      "note": "高效"
+    },
+    {
+      "vendor": "Google",
+      "model": "Gemini 1.0 Pro",
+      "input": 0.8087,
+      "output": 1.6175,
+      "context": "32K",
+      "note": ""
+    },
+    {
+      "vendor": "Microsoft",
+      "model": "GPT-4o (Azure)",
+      "input": 2.7935,
+      "output": 11.1739,
+      "context": "128K",
+      "note": "Azure OpenAI"
+    },
+    {
+      "vendor": "Microsoft",
+      "model": "GPT-4 Turbo (Azure)",
+      "input": 9.5345,
+      "output": 28.6034,
+      "context": "128K",
+      "note": "Azure OpenAI"
+    },
+    {
+      "vendor": "AWS",
+      "model": "Claude 3.5 Sonnet (Bedrock)",
+      "input": 3.025,
+      "output": 15.1252,
+      "context": "200K",
+      "note": "Bedrock"
+    },
+    {
+      "vendor": "AWS",
+      "model": "Titan Text Express",
+      "input": 0.0459,
+      "output": 0.1376,
+      "context": "8K",
+      "note": "Amazon Titan"
+    },
+    {
+      "vendor": "AWS",
+      "model": "Titan Text Premier",
+      "input": 1.0438,
+      "output": 3.1313,
+      "context": "32K",
+      "note": "Amazon Titan"
+    },
+    {
+      "vendor": "DeepSeek",
+      "model": "DeepSeek-R1",
+      "input": 0.4906,
+      "output": 1.4717,
+      "context": "128K",
+      "note": "开源"
+    },
+    {
+      "vendor": "DeepSeek",
+      "model": "DeepSeek-R1 Turbo",
+      "input": 0.2513,
+      "output": 0.7538,
+      "context": "64K",
+      "note": "开源"
+    },
+    {
+      "vendor": "Meta",
+      "model": "Llama 3.3 70B",
+      "input": 0.0011,
+      "output": 0.0011,
+      "context": "128K",
+      "note": "开源免费"
+    },
+    {
+      "vendor": "Meta",
+      "model": "Llama 3.3 8B",
+      "input": 0.001,
+      "output": 0.001,
+      "context": "128K",
+      "note": "开源免费"
+    },
+    {
+      "vendor": "Cloudflare",
+      "model": "Llama 3.1 8B",
+      "input": 0.1343,
+      "output": 0.1343,
+      "context": "64K",
+      "note": "Workers AI"
+    },
+    {
+      "vendor": "Cloudflare",
+      "model": "Mistral 7B",
+      "input": 0.0995,
+      "output": 0.0995,
+      "context": "32K",
+      "note": "Workers AI"
+    },
+    {
+      "vendor": "NVIDIA",
+      "model": "Nemotron-Mini-4B",
+      "input": 0.0011,
+      "output": 0.0011,
+      "context": "8K",
+      "note": "开源免费"
+    },
+    {
+      "vendor": "Perplexity",
+      "model": "pplx-7b-online",
+      "input": 0.204,
+      "output": 0.204,
+      "context": "128K",
+      "note": "联网搜索"
+    },
+    {
+      "vendor": "Perplexity",
+      "model": "pplx-70b-online",
+      "input": 1.0363,
+      "output": 1.0363,
+      "context": "128K",
+      "note": "联网搜索"
+    },
+    {
+      "vendor": "Mistral",
+      "model": "Mistral Large 2",
+      "input": 2.0045,
+      "output": 6.0134,
+      "context": "128K",
+      "note": ""
+    },
+    {
+      "vendor": "Mistral",
+      "model": "Mistral 8x7B",
+      "input": 0.1835,
+      "output": 0.1835,
+      "context": "64K",
+      "note": "开源"
+    },
+    {
+      "vendor": "Cohere",
+      "model": "Command R+",
+      "input": 0.9236,
+      "output": 2.7709,
+      "context": "128K",
+      "note": ""
+    },
+    {
+      "vendor": "Cohere",
+      "model": "Command R",
+      "input": 0.151,
+      "output": 0.151,
+      "context": "128K",
+      "note": ""
+    },
+    {
+      "vendor": "Databricks",
+      "model": "Dolly 2.0",
+      "input": 0.001,
+      "output": 0.001,
+      "context": "8K",
+      "note": "开源免费"
+    },
+    {
+      "vendor": "Hugging Face",
+      "model": "Zephyr 7B",
+      "input": 0.0012,
+      "output": 0.0012,
+      "context": "8K",
+      "note": "开源免费"
+    },
+    {
+      "vendor": "ByteDance",
+      "model": "Doubao 4.0",
+      "input": 0.8689,
+      "output": 2.6066,
+      "context": "128K",
+      "note": "中文优化"
+    },
+    {
+      "vendor": "Baidu",
+      "model": "ERNIE 4.0",
+      "input": 0.5203,
+      "output": 1.561,
+      "context": "128K",
+      "note": "中文优化"
+    },
+    {
+      "vendor": "Alibaba",
+      "model": "Qwen 2.5 72B",
+      "input": 0.001,
+      "output": 0.001,
+      "context": "128K",
+      "note": "开源免费"
+    },
+    {
+      "vendor": "Alibaba",
+      "model": "Qwen 2.5 14B",
+      "input": 0.0012,
+      "output": 0.0012,
+      "context": "128K",
+      "note": "开源免费"
+    },
+    {
+      "vendor": "Tencent",
+      "model": "Hunyuan Large Model",
+      "input": 0.7594,
+      "output": 2.2782,
+      "context": "128K",
+      "note": "中文优化"
+    },
+    {
+      "vendor": "JD",
+      "model": "JD Chat",
+      "input": 0.614,
+      "output": 1.8421,
+      "context": "64K",
+      "note": "电商场景"
+    }
+  ]
+}

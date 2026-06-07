@@ -1,0 +1,86 @@
+name: Update Pricing Data and Deploy to GitHub Pages
+
+on:
+  schedule:
+    # 每周一凌晨 0 点（UTC）运行
+    - cron: '0 0 * * 1'
+  workflow_dispatch:   # 允许手动触发
+  push:
+    branches: [main, master]  # 推送到 main 或 master 分支时触发部署
+
+# 设置权限
+permissions:
+  contents: write   # 允许推送更新
+  pages: write      # 允许部署到 GitHub Pages
+  id-token: write   # 允许使用 OIDC 令牌
+
+# 并发控制
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 获取全部历史，方便脚本检查
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 playwright
+
+      - name: Install Playwright browsers
+        run: |
+          playwright install --with-deps chromium
+
+      - name: Run fetch script
+        run: python scripts/fetch_prices.py
+
+      - name: Save history snapshot
+        run: |
+          mkdir -p history
+          cp pricing.json "history/$(date +'%Y-%m-%d').json"
+
+      - name: Build history OHLC data
+        run: python scripts/build_history.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pricing.json history/ history.json
+          git diff --staged --quiet || (git commit -m "Auto-update pricing data $(date +'%Y-%m-%d')" && git push)
+
+  # 部署到 GitHub Pages
+  deploy:
+    needs: update  # 等待 update 任务完成
+    runs-on: ubuntu-latest
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'  # 上传整个项目目录
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

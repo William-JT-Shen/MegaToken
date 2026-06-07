@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Token 价格看板 · 每百万 token 美元</title>
+  <p style="text-align:center;"><a href="chart.html" style="color:#2563eb;">📈 查看历史价格 K 线图</a></p>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f5f7fb; color: #1e293b; padding: 1rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 2rem; }
+    h1 { font-size: 2rem; color: #0f172a; }
+    .update-info { font-size: 0.9rem; color: #64748b; margin-top: 0.25rem; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: 1.5rem; }
+    .search-box { flex: 1; min-width: 200px; padding: 0.6rem 1rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; }
+    .currency-toggle { display: flex; align-items: center; gap: 0.5rem; background: white; padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #cbd5e1; cursor: pointer; user-select: none; }
+    .currency-toggle input { margin: 0; }
+    .table-wrapper { overflow-x: auto; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+    th { background: #f1f5f9; padding: 0.9rem 1rem; text-align: left; font-weight: 600; font-size: 0.9rem; cursor: pointer; user-select: none; }
+    th:hover { background: #e2e8f0; }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
+    tr:hover td { background: #f8fafc; }
+    .vendor { font-weight: 500; color: #334155; }
+    .price-input { color: #0f766e; font-weight: 600; }
+    .price-output { color: #b45309; font-weight: 600; }
+    .cheapest { background: #dcfce7 !important; }
+    .note { font-size: 0.8rem; color: #64748b; margin-top: 1rem; text-align: center; }
+    .sort-indicator { font-size: 0.7rem; margin-left: 0.3rem; }
+    @media (max-width: 600px) {
+      .toolbar { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🤖 AI 大模型 Token 价格看板</h1>
+    <p class="update-info" id="updateInfo">每百万 token 价格（美元） · 数据更新：2025-06-07 · 仅供参考</p>
+  </header>
+  <div class="toolbar">
+    <input type="text" class="search-box" id="searchInput" placeholder="搜索模型或供应商...">
+    <label class="currency-toggle">
+      <input type="checkbox" id="currencyCheckbox"> 显示人民币 (≈7.2 CNY/USD)
+    </label>
+  </div>
+  <div class="table-wrapper">
+    <table id="pricingTable">
+      <thead>
+      <tr>
+        <th data-sort="vendor">供应商 <span class="sort-indicator"></span></th>
+        <th data-sort="model">模型 <span class="sort-indicator"></span></th>
+        <th data-sort="input">输入价格 (每百万token) <span class="sort-indicator"></span></th>
+        <th data-sort="output">输出价格 (每百万token) <span class="sort-indicator"></span></th>
+        <th data-sort="context">上下文窗口 <span class="sort-indicator"></span></th>
+        <th>备注</th>
+      </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+  <p class="note">💡 绿色行标记为目前价格最低的输入或输出模型。数据源自公开定价页面，实际请以官方为准。</p>
+</div>
+
+<script>
+  const CNY_RATE = 7.2;
+  let showCNY = false;
+  let pricingData = [];
+  let currentData = [];
+  let sortColumn = null;
+  let sortDirection = 'asc';
+
+  const tableBody = document.getElementById('tableBody');
+  const searchInput = document.getElementById('searchInput');
+  const currencyCheckbox = document.getElementById('currencyCheckbox');
+
+  function formatPrice(usd) {
+    const value = showCNY ? usd * CNY_RATE : usd;
+    const symbol = showCNY ? '¥' : '$';
+    return `${symbol}${value.toFixed(4)}`;
+  }
+
+  function getCheapestModels(data) {
+    let minInput = Infinity, minOutput = Infinity;
+    data.forEach(d => { if (d.input < minInput) minInput = d.input; if (d.output < minOutput) minOutput = d.output; });
+    const cheapestInput = new Set(data.filter(d => d.input === minInput).map(d => d.model));
+    const cheapestOutput = new Set(data.filter(d => d.output === minOutput).map(d => d.model));
+    return { cheapestInput, cheapestOutput };
+  }
+
+  function render(data) {
+    const { cheapestInput, cheapestOutput } = getCheapestModels(data);
+    tableBody.innerHTML = data.map(d => {
+      const isCheap = cheapestInput.has(d.model) || cheapestOutput.has(d.model);
+      return `<tr class="${isCheap ? 'cheapest' : ''}">
+        <td class="vendor">${d.vendor}</td>
+        <td>${d.model}</td>
+        <td class="price-input">${formatPrice(d.input)}</td>
+        <td class="price-output">${formatPrice(d.output)}</td>
+        <td>${d.context}</td>
+        <td>${d.note || '-'}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function sortData(col) {
+    if (sortColumn === col) {
+      sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortColumn = col;
+      sortDirection = 'asc';
+    }
+    currentData.sort((a, b) => {
+      let valA = a[col], valB = b[col];
+      if (col === 'vendor' || col === 'model') {
+        return sortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+      }
+      return sortDirection === 'asc' ? valA - valB : valB - valA;
+    });
+    render(currentData);
+    updateSortIndicators();
+  }
+
+  function updateSortIndicators() {
+    document.querySelectorAll('th').forEach(th => {
+      const col = th.dataset.sort;
+      th.querySelector('.sort-indicator').textContent = col === sortColumn ? (sortDirection === 'asc' ? '▲' : '▼') : '';
+    });
+  }
+
+  function filterData() {
+    const query = searchInput.value.toLowerCase().trim();
+    currentData = query ? pricingData.filter(d =>
+      d.vendor.toLowerCase().includes(query) || d.model.toLowerCase().includes(query)
+    ) : [...pricingData];
+    if (sortColumn) {
+      sortData(sortColumn);
+    } else {
+      render(currentData);
+    }
+  }
+
+  async function loadData() {
+    try {
+      const basePath = window.location.pathname.replace('/index.html', '');
+      const res = await fetch(`${basePath}/pricing.json`);
+      if (!res.ok) throw new Error('网络错误');
+      const json = await res.json();
+      pricingData = json.models || [];
+      document.getElementById('updateInfo').textContent = `每百万 token 价格（美元） · 数据更新：${json.last_updated || '未知'} · 仅供参考`;
+      currentData = [...pricingData];
+      render(currentData);
+    } catch (e) {
+      console.error('数据加载失败:', e);
+      document.getElementById('updateInfo').textContent = '数据加载失败，请刷新重试。';
+    }
+  }
+
+  searchInput.addEventListener('input', filterData);
+  currencyCheckbox.addEventListener('change', (e) => {
+    showCNY = e.target.checked;
+    render(currentData);
+  });
+  document.querySelectorAll('th').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.dataset.sort;
+      if (col) sortData(col);
+    });
+  });
+
+  loadData();
+</script>
+</body>
+</html>
